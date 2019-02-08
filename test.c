@@ -18,38 +18,41 @@ void short_test (char *text, int N, char * pattern, int M){
 }
 
 void stress_test(int N, int M){
+  int i;
   static char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   srand(time(NULL));   // Initialization, should only be called once.
   
   while (1) {
     int n = rand() % (N-3) + 3;      // Returns a pseudo-random integer between 3 and N.
-	int m = rand() % M + 1; 
+    int m = rand() % M + 1; 
     
-	char *text = malloc(n);
-    for (int i=0; i<n; i++){
+    char *text = malloc(n+1);
+    for (i=0; i<n; i++){
 	  int pos = rand() % (int)(sizeof(charset) -1);
-      text[i] = charset[pos];      
+          text[i] = charset[pos];      
     }
-	
-	char *pattern = malloc(m);
-    for (int i=0; i<m; i++){
-	  int pos = rand() % (int)(sizeof(charset) -1);
-      pattern[i] = charset[pos];      
+    text[i] = '\0';
+	  
+    char *pattern = malloc(m +1);
+    for (i=0; i<m; i++){
+	  int pos = rand() % (int)(sizeof(charset) - 1);
+          pattern[i] = charset[pos];      
     }
-    
+    pattern[i] = '\0';
+	  
     printf("text='%s', pattern='%s'\n", text, pattern);
 	
     int result1 = string_matching_naive(text, n, pattern, m);
     int result2 = string_matching_kmp(text, n, pattern, m);
     
     if (result1==result2)
-      printf("OK\n");
+      	printf("OK\n");
     else {
-      printf("Wrong answer: correct=%d, got instead=%d\n", result1, result2);
-	  exit(0);
-	}
-	free(text);
-	free(pattern);
+      	printf("Wrong answer: correct=%d, got instead=%d\n", result1, result2);
+	exit(0);
+    }
+    free(text);
+    free(pattern);
   }  
 }
 
